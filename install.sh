@@ -18,4 +18,4 @@ sed -i.bak "s@home.homeDirectory.*@home.homeDirectory = \""$HOME"\";@" ~/.config
 home-manager switch
 
 # Personal configuration download
-{ cd ~ ; echo ".mycfg" >> ~/.gitignore ; git clone --bare git@github.com:BACONWRAP/dotfiles.git $HOME/.mycfg ; alias config='git --git-dir=$HOME/.mycfg/ --work-tree=$HOME' ; config checkout ; config config --local status.showUntrackedFiles no ; cd - ; }
+# { cd ~ ; echo ".mycfg" >> ~/.gitignore ; git clone --bare git@github.com:BACONWRAP/dotfiles.git $HOME/.mycfg ; exec alias config='git --git-dir=$HOME/.mycfg/ --work-tree=$HOME' ; config checkout ; config config --local status.showUntrackedFiles no ; cd - ; }
