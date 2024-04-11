@@ -39,6 +39,7 @@
     pkgs.neovim
     pkgs.fzf
     pkgs.tmux
+    pkgs.gcc
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
