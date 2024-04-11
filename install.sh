@@ -15,5 +15,4 @@ nix-shell '<home-manager>' -A install
 cd ~/.config/home-manager && { curl -O https://raw.githubusercontent.com/BACONWRAP/porta-env/main/home.nix ; cd -; }
 sed -i.bak 's/home.username.*/home.username = "${(whoami)}";/g' ~/.config/home-manager/home.nix && rm ~/.config/home-manager/home.nix.bak
 sed -i.bak 's/home.username.*/home.username = "${(echo $HOME)}";/g' ~/.config/nixpkgs/home.nix && rm ~/.config/nixpkgs/home.nix.bak
-sed 
 home-manager switch
