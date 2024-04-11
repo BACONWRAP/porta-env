@@ -16,4 +16,6 @@ cd ~/.config/home-manager && { curl -O https://raw.githubusercontent.com/BACONWR
 sed -i.bak "s/home.username.*/home.username = \"$(whoami)\";/" ~/.config/home-manager/home.nix && rm ~/.config/home-manager/home.nix.bak
 sed -i.bak "s@home.homeDirectory.*@home.homeDirectory = \""$HOME"\";@" ~/.config/home-manager/home.nix && rm ~/.config/home-manager/home.nix.bak
 home-manager switch
-exec $SHELL
+
+# Personal configuration download
+{ cd ~ ; echo ".mycfg" >> ~/.gitignore ; git clone --bare git@github.com:BACONWRAP/dotfiles.git $HOME/.mycfg ; alias config='git --git-dir=$HOME/.mycfg/ --work-tree=$HOME' ; config checkout ; config config --local status.showUntrackedFiles no ; }
