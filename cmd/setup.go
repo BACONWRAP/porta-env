@@ -12,8 +12,8 @@ import (
 // setupCmd represents the setup command
 var setupCmd = &cobra.Command{
 	Use:   "setup",
-	Short: "Setup your environment for replecation elsewere.",
-	Long: `Setup your environment for replecation elsewere. 
+	Short: "Setup your environment for replication elsewhere.",
+	Long: `Setup your environment for replecation elsewhere. 
 This will install nix and home-manager on your system. Requires sudo.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("setup called")
