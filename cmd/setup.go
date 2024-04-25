@@ -17,7 +17,12 @@ var setupCmd = &cobra.Command{
 This will install nix and home-manager on your system. Requires sudo.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("setup called")
-		executeCmd("sh", "-c", "curl -L https://nixos.org/nix/install | sh")
+		executeCmd("sh", "-c", "curl -L https://nixos.org/nix/install | sh -s -- --daemon")
+		executeCmd("sh", "-c", ". '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'")
+		executeCmd("sh", "-c", "PATH='$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH'")
+		executeCmd("sh", "-c", "nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager")
+		executeCmd("sh", "-c", "nix-channel --update")
+		executeCmd("sh", "-c", "nix-shell '<home-manager>' -A install")
 	},
 }
 

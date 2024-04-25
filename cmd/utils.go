@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"log"
-	"os"
 	"os/exec"
 	"strings"
 )
@@ -14,7 +13,7 @@ func executeCmd(command string, args ...string) {
 
 	stdOut, err := cmd.StdoutPipe()
 	if err != nil {
-		log.Fatal(os.Stderr, "Error creating StdoutPipe for Cmd", err)
+		log.Fatal("Error creating StdoutPipe for Cmd", err)
 	}
 
 	defer stdOut.Close()
@@ -28,7 +27,7 @@ func executeCmd(command string, args ...string) {
 
 	stdErr, err := cmd.StderrPipe()
 	if err != nil {
-		log.Fatal(os.Stderr, "Error creating StderrPipe for Cmd", err)
+		log.Fatal("Error creating StderrPipe for Cmd", err)
 	}
 
 	defer stdErr.Close()
@@ -47,7 +46,7 @@ func executeCmd(command string, args ...string) {
 
 	err = cmd.Start()
 	if err != nil {
-		log.Fatal(os.Stderr, "Error starting Cmd", err)
+		log.Fatal("Error starting Cmd", err)
 	}
 
 	err = cmd.Wait()
