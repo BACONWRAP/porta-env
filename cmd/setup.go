@@ -17,8 +17,8 @@ import (
 // setupCmd represents the setup command
 var setupCmd = &cobra.Command{
 	Use:   "setup",
-	Short: "Setup your environment for replication elsewhere.",
-	Long: `Setup your environment for replecation elsewhere. 
+	Short: "Setup your environment for use with porta-env.",
+	Long: `Setup your environment for use with porta-env. 
 This will install nix and home-manager on your system. Requires sudo.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("setup called")
@@ -26,15 +26,6 @@ This will install nix and home-manager on your system. Requires sudo.`,
 		executeCmd("sh", "-c", ". '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'")
 		nixChannel, _ := filepath.Glob("/nix/store/*/bin/nix-channel")
 		nixShell, _ := filepath.Glob("/nix/store/*/bin/nix-shell")
-
-		//	os.Setenv("PATH", os.ExpandEnv("$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH"))
-		// fmt.Println(os.Getenv("PATH"))
-		//	executeCmd("sh", "-c", "export PATH='$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH'")
-		//	out, err := exec.Command("sh", "-c", "find 2>/dev/null/ / -name nix-channel").Output()
-		//	if err != nil {
-		//		log.Fatal("Find nix-channel failed")
-		//	}
-		//	fmt.Println(string(out))
 
 		bins, _ := filepath.Glob("/nix/store/*/bin")
 		for _, bin := range bins {
@@ -44,7 +35,10 @@ This will install nix and home-manager on your system. Requires sudo.`,
 		executeCmd("sh", "-c", nixChannel[0]+" --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager")
 		executeCmd("sh", "-c", nixChannel[0]+" --update")
 		executeCmd("sh", "-c", nixShell[0]+" '<home-manager>' -A install")
-		fmt.Println(os.Getenv("PATH"))
+		fmt.Printf(`
+Please restart your shell to complete the setup.
+You can run porta-env create to build a new toolbox,
+or porta-env replicate to download an existing one.`)
 	},
 }
 
