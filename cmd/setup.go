@@ -5,6 +5,11 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
+
+	//	"log"
+	//	"os/exec"
 
 	"github.com/spf13/cobra"
 )
@@ -19,10 +24,27 @@ This will install nix and home-manager on your system. Requires sudo.`,
 		fmt.Println("setup called")
 		executeCmd("sh", "-c", "curl -L https://nixos.org/nix/install | sh -s -- --daemon")
 		executeCmd("sh", "-c", ". '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'")
-		executeCmd("sh", "-c", "PATH='$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH'")
-		executeCmd("sh", "-c", "nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager")
-		executeCmd("sh", "-c", "nix-channel --update")
-		executeCmd("sh", "-c", "nix-shell '<home-manager>' -A install")
+		nixChannel, _ := filepath.Glob("/nix/store/*/bin/nix-channel")
+		nixShell, _ := filepath.Glob("/nix/store/*/bin/nix-shell")
+
+		//	os.Setenv("PATH", os.ExpandEnv("$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH"))
+		// fmt.Println(os.Getenv("PATH"))
+		//	executeCmd("sh", "-c", "export PATH='$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH'")
+		//	out, err := exec.Command("sh", "-c", "find 2>/dev/null/ / -name nix-channel").Output()
+		//	if err != nil {
+		//		log.Fatal("Find nix-channel failed")
+		//	}
+		//	fmt.Println(string(out))
+
+		bins, _ := filepath.Glob("/nix/store/*/bin")
+		for _, bin := range bins {
+			fmt.Println("setting: " + bin)
+			os.Setenv("PATH", os.ExpandEnv(bin+":$PATH"))
+		}
+		executeCmd("sh", "-c", nixChannel[0]+" --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager")
+		executeCmd("sh", "-c", nixChannel[0]+" --update")
+		executeCmd("sh", "-c", nixShell[0]+" '<home-manager>' -A install")
+		fmt.Println(os.Getenv("PATH"))
 	},
 }
 
