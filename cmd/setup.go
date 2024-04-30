@@ -38,7 +38,7 @@ This will install nix and home-manager on your system. Requires sudo.`,
 		fmt.Printf(`
 Please restart your shell to complete the setup.
 You can run porta-env create to build a new toolbox,
-or porta-env replicate to download an existing one.`)
+or porta-env replicate to download an existing one.\n`)
 	},
 }
 
