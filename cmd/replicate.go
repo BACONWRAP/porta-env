@@ -5,6 +5,8 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"regexp"
 
 	"github.com/spf13/cobra"
 )
@@ -13,10 +15,27 @@ import (
 var replicateCmd = &cobra.Command{
 	Use:   "replicate",
 	Short: "Replicate an environment on this machine.",
-	Long: `From a remote repository, replicate the defined environment in home-manager.nix on this machine.
-Installs nix and home-manager if not already installed. Requires sudo.`,
+	Long: `From a remote repository, replicate the defined environment in home.nix on this machine.
+Requires sudo.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("replicate called")
+		if len(args) == 0 {
+			fmt.Println("No repository specified.")
+			return
+		}
+		executeCmd("sh", "-c", "curl -OL "+args[0])
+		fmt.Println("Downloaded main.tar.gz")
+		fmt.Println("Moving main.tar.gz to " + os.Getenv("HOME") + ".config/home-manager/main.tar.gz")
+		os.Rename("main.tar.gz", os.Getenv("HOME")+"/.config/home-manager/main.tar.gz")
+		fmt.Println("Extracting main.tar.gz to " + os.Getenv("HOME") + ".config/home-manager")
+		executeCmd("sh", "-c", "tar -xzf "+os.Getenv("HOME")+"/.config/home-manager/main.tar.gz -C "+os.Getenv("HOME")+"/.config/home-manager")
+		fmt.Println("Moving toolbox-main to " + os.Getenv("HOME") + ".config/home-manager")
+		executeCmd("sh", "-c", "mv "+os.Getenv("HOME")+"/.config/home-manager/toolbox-main/* "+os.Getenv("HOME")+"/.config/home-manager")
+		fmt.Println("Modifying home.nix to use right env vars")
+		replaceInFile(os.Getenv("HOME")+"/.config/home-manager/home.nix", *regexp.MustCompile(`home.username.*`),
+			"home.username = \""+os.Getenv("USER")+"\";")
+		replaceInFile(os.Getenv("HOME")+"/.config/home-manager/home.nix", *regexp.MustCompile(`home.homeDirectory.*`),
+			"home.homeDirectory = \""+os.Getenv("HOME")+"\";")
+		executeCmd("sh", "-c", "home-manager switch")
 	},
 }
 
