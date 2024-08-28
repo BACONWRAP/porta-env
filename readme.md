@@ -1,7 +1,9 @@
 ## how to use
 
+### to demo
 ```bash
-bash <(curl https://raw.githubusercontent.com/BACONWRAP/porta-env/main/install.sh)
+./porta-env-linux-arm64 setup
+./porta-env-linux-arm64 replicate https://github.com/BACONWRAP/toolbox/archive/main.tar.gz
 ```
 
 ### What it does
@@ -11,6 +13,7 @@ bash <(curl https://raw.githubusercontent.com/BACONWRAP/porta-env/main/install.s
 - Places the configuration in ~/.config/nixpkgs/home.nix
 - Modifies the home.nix config to use this machine's env vars
 - Installs the packages in the home.nix config
+- Symlinks all dotfiles into the home directory
 
 ### What it still needs
 
